@@ -67,8 +67,8 @@ class moduloexamen {
 
 				setcookie ("logged",$_POST["sessionid"]);			
 				session_start();
-				session_register('alumno');
 				
+				$_SESSION['usuario'] = 'alumno';
 				$_SESSION['sessionid'] = $_POST["sessionid"];
 				$_SESSION['numcontrol'] = $_POST["numcontrol"];
 				$_SESSION['idexamen'] = $_POST["idexamen"];

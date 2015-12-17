@@ -48,7 +48,7 @@ class moduloadmin {
 				setcookie ("idusuario", $fila->idusuario);					
 				session_start();
 				//session_is_registered('admin');
-				$_SESSION['user']="admin";
+				$_SESSION['user'] = "admin";
 
 				header("Location: index.php");
 			} else {

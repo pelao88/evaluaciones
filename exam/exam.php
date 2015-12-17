@@ -24,7 +24,7 @@ include ($langfile);
 
 //modificado el 20/Abril/2004 
 session_start();
-if (session_is_registered('alumno')) {	
+if (isset($_SESSION['usuario'])) {	
 
 
 if(isset($_SESSION['numcontrol']))
