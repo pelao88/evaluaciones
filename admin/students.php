@@ -35,14 +35,6 @@ class modalumnos {
 		$query = "SELECT a.*, g.* FROM talumnos a INNER JOIN tgrupos g ON g.idgrupo = a.idgrupo";
 		$req = mysql_query($query);
 
-		$get=mysql_query("SELECT * FROM tgrupos ORDER BY grupo ASC");
-		$option = '';
-		while($row1 = mysql_fetch_assoc($get))
-		{
-		  $option .= 	'<option value = "'.$row1['idgrupo'].'">'.$row1['grupo'].'</option>';
-		}
-
-
 		echo "<table border=1>
 				<caption> Alumnos </caption>
 					<tr><td class=\"bgblue\">Control </td>
@@ -51,12 +43,13 @@ class modalumnos {
 					<td class=\"bgblue\" align=\"center\" colspan=\"2\">Acciones</td>    				  	
 					</tr>";
 		while ($row=mysql_fetch_object($req)){
-			  echo "<tr><td>".$row->numcontrol."</td>
-			  			  	<td>".$row->nombre."</td>
-							<td>".$row->grupo."</td>
-					 		<td><input type=\"button\" onclick=\"location='students.php?action=editar&id=".$row->idalumno."&txtnombre=".$row->nombre."&txtnumctrl=".$row->numcontrol."&idgrupo=".$row->idgrupo."'\" value=\"Editar\"></td>
-							<td><input type=\"button\" onclick=\"if(confirm('¿Desea eliminar el alumno seleccionado?')) location='students.php?action=borrar&id=".$row->idalumno."'\" value=\"Eliminar\"></td> 							
-			 		</tr>";	
+			//$shit = $row->grupo;
+			echo "<tr><td>".$row->numcontrol."</td>
+			  	  	  <td>".$row->nombre."</td>
+					  <td>".$row->grupo."</td>
+					  <td><input type=\"button\" onclick=\"location='students.php?action=editar&id=".$row->idalumno."&txtnombre=".$row->nombre."&txtnumctrl=".$row->numcontrol."&idgrupo=".$row->idgrupo."'\" value=\"Editar\"></td>
+					  <td><input type=\"button\" onclick=\"if(confirm('¿Desea eliminar el alumno seleccionado?')) location='students.php?action=borrar&id=".$row->idalumno."'\" value=\"Eliminar\"></td> 							
+			 	  </tr>";	
 		}
 
 		echo "</table><hr>						
@@ -64,10 +57,36 @@ class modalumnos {
 					<input type=\"hidden\" name=\"txtidalumno\" value=\"".$idalumno."\">
 						<table border=0>								
 							<tr><td>nombre: </td> <td><input type=\"text\" name=\"txtnombre\" value=\"".$txtnombre."\" size=\"40\"></td></tr>";
-							if($action != 'editar'){
-								echo "<tr><td>Curso: </td> <td><select name=\"curso\">'<option value = \"0\">Seleccionar curso...</option>".$option."</select></td></tr>";
+							$get 	 = mysql_query("SELECT * FROM tgrupos ORDER BY idgrupo ASC");
+							$option  = '';
+							$option1 = '';
+							
+							if($action == 'guardar'){
+								$id_grupo = $_REQUEST['idgrupo'];
+								$get1    = mysql_query("SELECT * FROM tgrupos WHERE idgrupo = '".$id_grupo."' ORDER BY idgrupo ASC");
+								while($row2 = mysql_fetch_assoc($get1))
+								{
+			  						$grupoid  = $row2['idgrupo'];
+			  						$gruponom =	$row2['grupo'];
+			  						$option1  = 	'<option value = "'.$grupoid.'">'.$gruponom.'</option>';
+			  						while($row1 = mysql_fetch_assoc($get))
+									{
+										$option .= 	'<option value = "'.$row1['idgrupo'].'">'.$row1['grupo'].'</option>';
+									}	
+								}							
+					
+							}else{	
+								while($row1 = mysql_fetch_assoc($get))
+								{
+			  						$option .= 	'<option value = "'.$row1['idgrupo'].'">'.$row1['grupo'].'</option>';
+								}
+							}
+
+
+							if($action == 'guardar'){
+								echo "<tr><td>Curso: </td> <td><select name=\"curso\">".$option1.$option."</select></td></tr>";
 							} else{
-								echo "<tr><td>Curso: </td> <td><select name=\"curso\">'<option value = \"".$curso."\">".$grupo."</option>";
+								echo "<tr><td>Curso: </td> <td><select name=\"curso\"><option value = \"0\">Seleccionar curso...</option>".$option."</select></td></tr>";
 							}							
 		echo				"<tr><td>numero de ctrl.: </td> <td><input type=\"text\" name=\"txtnumctrl\" value=\"".$txtnumctrl."\" size=\"40\"></td></tr>							
 							<tr><td></td>
